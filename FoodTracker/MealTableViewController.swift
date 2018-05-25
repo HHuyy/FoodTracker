@@ -10,20 +10,15 @@ import UIKit
 
 import os.log
 
-class MealTableViewController: UITableViewController, UISearchBarDelegate {
+class MealTableViewController: UITableViewController {
     var meals = [Meal]()
-    
-    @IBOutlet weak var searchBar: UISearchBar!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if let savedMeals = loadMeals() {
             meals += savedMeals
         } else {
-            loadSampleMeals()
         }
-        searchBar.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,7 +35,7 @@ class MealTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return meals.count
+        return DataService.share.meals.count
     }
 
     
@@ -49,11 +44,9 @@ class MealTableViewController: UITableViewController, UISearchBarDelegate {
             fatalError("The dequeued cell is not an instance of MealTableViewCell.")
         }
         
-        let meal = meals[indexPath.row]
-        
-        cell.nameLabel.text = meal.name
-        cell.photoImageView.image = meal.photo
-        cell.ratingControl.rating = meal.rating
+        cell.nameLabel.text = DataService.share.meals[indexPath.row].name
+        cell.photoImageView.image = DataService.share.meals[indexPath.row].photo
+        cell.ratingControl.rating = DataService.share.meals[indexPath.row].rating
         return cell
     }
     
@@ -82,49 +75,13 @@ class MealTableViewController: UITableViewController, UISearchBarDelegate {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
-        
-        switch (segue.identifier ?? "") {
-        case "AddItem":
-            os_log("Adding a new meal.", log: OSLog.default, type: .debug)
-        
-        case "ShowDetail":
-            guard let mealDetailViewController = segue.destination as? MealViewController else {
-                fatalError("Unexpected destination: \(segue.destination)")
-            }
-            guard let selectedMealCell = sender as? MealTableViewCell else {
-                fatalError("Unexpected sender \(sender)")
-            }
-            guard let indexPath = tableView.indexPath(for: selectedMealCell) else {
-                fatalError("The selected cell is not being displayed by the table")
-            }
-            
-            let selectedMeal = meals[indexPath.row]
-            mealDetailViewController.meal = selectedMeal
-        
-        default:
-            fatalError("Unexpected Segue Identifier; \(segue.identifier)")
-        }
+        guard let mealDetailViewController = segue.destination as? MealViewController else {return}
+        guard let selectedMealCell = sender as? MealTableViewCell else {return}
+        guard let indexPath = tableView.indexPath(for: selectedMealCell) else {return}
+        let selectedMeal = DataService.share.meals[indexPath.row]
+        mealDetailViewController.meal = selectedMeal
     }
     
-    private func loadSampleMeals() {
-        let photo1 = UIImage(named: "hamburger")
-        let photo2 = UIImage(named: "pizza")
-        let photo3 = UIImage(named: "spaghetti")
-        
-        guard let meal1 = Meal(name: "Hamburger", photo: photo1, rating: 3) else {
-            fatalError("Unable to instantiate meal1")
-        }
-        
-        guard let meal2 = Meal(name: "Pizza", photo: photo2, rating: 5) else {
-            fatalError("Unable to instantiate meal2")
-        }
-        
-        guard let meal3 = Meal(name: "Spaghetti", photo: photo3, rating: 4) else {
-            fatalError("Unable to instantiate meal3")
-        }
-        
-        meals += [meal1, meal2, meal3]
-    }
     
     private func saveMeals() {
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
