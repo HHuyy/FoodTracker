@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import os.log
 
 class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -16,11 +15,12 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ratingControl: RatingControl!
     
-    var meal: Meal?
     var index: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         textField.delegate = self
         if let indexPaath = index {
             navigationItem.title = DataService.share.meals[indexPaath].name
@@ -74,19 +74,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
     @IBAction func cancel(_ sender: UIBarButtonItem) {
-        let isPresentingInAddMealMode = presentingViewController is UINavigationController
-        
-        if isPresentingInAddMealMode {
-            dismiss(animated: true, completion: nil)
-        }
-        else {
-            if let owningNavigationController = navigationController{
-                owningNavigationController.popViewController(animated: true)
-            }
-            else {
-                fatalError("The MealViewController is not inside a navigation controller.")
-            }
-        }
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func savebutt(_ sender: UIBarButtonItem) {

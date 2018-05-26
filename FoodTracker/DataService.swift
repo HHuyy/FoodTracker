@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class DataService {
     static let share: DataService = DataService()
     private var _meals: [Meal]?
