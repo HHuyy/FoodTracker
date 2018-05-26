@@ -104,10 +104,10 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         navigationController?.popViewController(animated: true)
     }
     
-    
     private func updateSaveButtonState() {
         let text = textField.text ?? ""
         saveButton.isEnabled = !text.isEmpty
     }
+    
 }
 

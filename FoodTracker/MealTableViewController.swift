@@ -56,7 +56,7 @@ class MealTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            meals.remove(at: indexPath.row)
+            DataService.share.meals.remove(at: indexPath.row)
             saveMeals()
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
@@ -70,7 +70,6 @@ class MealTableViewController: UITableViewController {
         guard let indexPath = tableView.indexPath(for: selectedMealCell) else {return}
         mealDetailViewController.index = indexPath.row
     }
-    
     
     private func saveMeals() {
         let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
