@@ -30,4 +30,7 @@ class DataService {
         guard let meal3 = Meal(name: "Spaghetti", photo: #imageLiteral(resourceName: "spaghetti"), rating: 4) else {return}
         _meals = [meal1, meal2, meal3]
     }
+    func insertNewMeal(meal: Meal) {
+        _meals?.append(meal)
+    }
 }

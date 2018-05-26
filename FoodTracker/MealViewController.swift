@@ -17,15 +17,17 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var ratingControl: RatingControl!
     
     var meal: Meal?
+    var index: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         textField.delegate = self
-        if let meal = meal {
-            navigationItem.title = meal.name
-            textField.text = meal.name
-            photoImageView.image = meal.photo
-            ratingControl.rating = meal.rating
+        if let indexPaath = index {
+            navigationItem.title = DataService.share.meals[indexPaath].name
+            textField.text = DataService.share.meals[indexPaath].name
+            photoImageView.image = DataService.share.meals[indexPaath].photo
+            ratingControl.rating = DataService.share.meals[indexPaath].rating
+            
         }
         updateSaveButtonState()
     }
@@ -87,18 +89,21 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        super.prepare(for: segue, sender: sender)
-        guard let button = sender as? UIBarButtonItem, button == saveButton else {
-            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
-            return
-        }
+    @IBAction func savebutt(_ sender: UIBarButtonItem) {
         let name = textField.text ?? ""
         let photo = photoImageView.image
         let rating = ratingControl.rating
-        
-        meal = Meal(name: name, photo: photo, rating: rating)
+        if let indexPath = index {
+            DataService.share.meals[indexPath].name = name
+            DataService.share.meals[indexPath].photo = photo
+            DataService.share.meals[indexPath].rating = rating
+        } else {
+            guard let meal = Meal(name: name, photo: photo, rating: rating) else { return}
+            DataService.share.insertNewMeal(meal: meal)
+        }
+        navigationController?.popViewController(animated: true)
     }
+    
     
     private func updateSaveButtonState() {
         let text = textField.text ?? ""
