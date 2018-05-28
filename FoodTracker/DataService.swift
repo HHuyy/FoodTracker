@@ -34,4 +34,5 @@ class DataService {
     func insertNewMeal(meal: Meal) {
         _meals?.append(meal)
     }
+    
 }

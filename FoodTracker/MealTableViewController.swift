@@ -10,15 +10,20 @@ import UIKit
 
 import os.log
 
-class MealTableViewController: UITableViewController {
+class MealTableViewController: UITableViewController, UISearchBarDelegate {
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    var filteredData: String?
+    var MEal: [Meal] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
+        MEal = DataService.share.meals
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -26,15 +31,12 @@ class MealTableViewController: UITableViewController {
         tableView.reloadData()
         
     }
-    // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return DataService.share.meals.count
+        return MEal.count
     }
 
     
@@ -42,15 +44,15 @@ class MealTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MealCell", for: indexPath) as? MealTableViewCell else {
             fatalError("The dequeued cell is not an instance of MealTableViewCell.")
         }
-        cell.nameLabel.text = DataService.share.meals[indexPath.row].name
-        cell.photoImageView.image = DataService.share.meals[indexPath.row].photo
-        cell.ratingControl.rating = DataService.share.meals[indexPath.row].rating
+        cell.nameLabel.text = MEal[indexPath.row].name
+        cell.photoImageView.image = MEal[indexPath.row].photo
+        cell.ratingControl.rating = MEal[indexPath.row].rating
         return cell
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            DataService.share.meals.remove(at: indexPath.row)
+            MEal.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
         }    
@@ -62,5 +64,16 @@ class MealTableViewController: UITableViewController {
         guard let selectedMealCell = sender as? MealTableViewCell else {return}
         guard let indexPath = tableView.indexPath(for: selectedMealCell) else {return}
         mealDetailViewController.index = indexPath.row
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        MEal = searchText.isEmpty ? DataService.share.meals : DataService.share.meals.filter({ (item: Meal) -> Bool in
+            if item.name.lowercased().contains(searchBar.text!.lowercased()) || item.name.uppercased().contains(searchBar.text!.uppercased()) {
+                return true
+            } else {
+                return false
+            }
+        })
+        tableView.reloadData()
     }
 }
