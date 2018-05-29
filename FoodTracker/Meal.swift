@@ -10,8 +10,10 @@ import UIKit
 
 import os.log
 
-class Meal: NSObject, NSCoding {
-    
+class Meal: Equatable {
+    static func == (lhs: Meal, rhs: Meal) -> Bool {
+        return lhs.name == rhs.name
+    }
     var name: String
     var photo: UIImage?
     var rating: Int
