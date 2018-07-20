@@ -15,12 +15,13 @@ class MealTableViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     
     var isSearchActive: Bool = false
-    var meals: [Meal] = []
+    var meals: [Food] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
         meals = DataService.share.meals
-        searchBar.showsCancelButton = true
+//        searchBar.showsCancelButton = true
+        DataService.share.loadSampleMeals()
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,18 +33,18 @@ class MealTableViewController: UITableViewController, UISearchBarDelegate {
         tableView.reloadData()
         
     }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.text?.removeAll()
-        searchBar.resignFirstResponder()
-        meals = DataService.share.meals
-        tableView.reloadData()
-    }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        isSearchActive = true
-    }
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        isSearchActive = false
-    }
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        searchBar.text?.removeAll()
+//        searchBar.resignFirstResponder()
+//        meals = DataService.share.meals
+//        tableView.reloadData()
+//    }
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+//        isSearchActive = searchBar.text != ""
+//    }
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+//        isSearchActive = false
+//    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return meals.count
@@ -53,18 +54,21 @@ class MealTableViewController: UITableViewController, UISearchBarDelegate {
             fatalError("The dequeued cell is not an instance of MealTableViewCell.")
         }
         cell.nameLabel.text = meals[indexPath.row].name
-        cell.photoImageView.image = meals[indexPath.row].photo
-        cell.ratingControl.rating = meals[indexPath.row].rating
+        cell.photoImageView.image = meals[indexPath.row].photo as? UIImage
+        cell.ratingControl.rating = Int(meals[indexPath.row].rate)
         return cell
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            if isSearchActive {
-                if let index = DataService.share.meals.index(of: meals[indexPath.row]) {
-                    DataService.share.meals.remove(at: index)
-                }
-            }
+//            if isSearchActive {
+//                if let index = DataService.share.meals.index(of: meals[indexPath.row]) {
+//                    DataService.share.meals.remove(at: index)
+//                DataService.share.deleteMeal(from: indexPath)
+//
+//                }
+//            }
+            DataService.share.deleteMeal(from: indexPath)
             meals.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
@@ -77,24 +81,20 @@ class MealTableViewController: UITableViewController, UISearchBarDelegate {
 //        guard let indexPath = tableView.indexPath(for: selectedMealCell) else {return}
 //        mealDetailViewController.index = indexPath.row
         guard let mealViewController = segue.destination as? MealViewController else { return  }
-        if let index = tableView.indexPathForSelectedRow {
+        if let indexPath = tableView.indexPathForSelectedRow {
             if isSearchActive {
-                if let indexSend = DataService.share.meals.index(of: meals[index.row]) {
-                    mealViewController.index = indexSend
-                }
+                mealViewController.index = meals[indexPath.row]
             } else {
-                mealViewController.index = index.row
+                mealViewController.index = DataService.share.meals[indexPath.row]
             }
         }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        meals = searchText.isEmpty ? DataService.share.meals : DataService.share.meals.filter({ (item: Meal) -> Bool in
-            if item.name.lowercased().contains(searchBar.text!.lowercased()) || item.name.uppercased().contains(searchBar.text!.uppercased()) {
-                return true
-            } else {
-                return false
-            }
+        isSearchActive = searchText != ""
+        print(isSearchActive)
+        meals = searchText.isEmpty ? DataService.share.meals : DataService.share.meals.filter({ (item: Food) -> Bool in
+            return (item.name?.lowercased().contains(searchBar.text!.lowercased()))!
         })
         tableView.reloadData()
     }

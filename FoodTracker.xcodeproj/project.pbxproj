@@ -10,6 +10,7 @@
 		AA5DAB1220AE72C5002FA389 /* MealTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DAB1120AE72C5002FA389 /* MealTableViewCell.swift */; };
 		AA5DAB1420AE796C002FA389 /* MealTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DAB1320AE796C002FA389 /* MealTableViewController.swift */; };
 		AA5DAB1620AE79E7002FA389 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5DAB1520AE79E7002FA389 /* Meal.swift */; };
+		AA753BA220F600E5004AEA0C /* FoodTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AA753BA020F600E5004AEA0C /* FoodTracker.xcdatamodeld */; };
 		AA8F541120AD74ED0047C5DE /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8F541020AD74ED0047C5DE /* RatingControl.swift */; };
 		AAE671DC20B7F2CF0060A9DA /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE671DB20B7F2CF0060A9DA /* DataService.swift */; };
 		AAE902D820AD28720065ED31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE902D720AD28720065ED31 /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 		AA5DAB1120AE72C5002FA389 /* MealTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTableViewCell.swift; sourceTree = "<group>"; };
 		AA5DAB1320AE796C002FA389 /* MealTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTableViewController.swift; sourceTree = "<group>"; };
 		AA5DAB1520AE79E7002FA389 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
+		AA753BA120F600E5004AEA0C /* FoodTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FoodTracker.xcdatamodel; sourceTree = "<group>"; };
 		AA8F541020AD74ED0047C5DE /* RatingControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 		AAE671DB20B7F2CF0060A9DA /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		AAE902D420AD28720065ED31 /* FoodTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,6 +47,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA753BA320F6025C004AEA0C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AAE671DB20B7F2CF0060A9DA /* DataService.swift */,
+				AA5DAB1520AE79E7002FA389 /* Meal.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AA753BA420F60264004AEA0C /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				AA5DAB1320AE796C002FA389 /* MealTableViewController.swift */,
+				AAE902D920AD28720065ED31 /* MealViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		AA753BA520F60280004AEA0C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA8F541020AD74ED0047C5DE /* RatingControl.swift */,
+				AA5DAB1120AE72C5002FA389 /* MealTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		AAE902CB20AD28720065ED31 = {
 			isa = PBXGroup;
 			children = (
@@ -65,15 +94,13 @@
 			isa = PBXGroup;
 			children = (
 				AAE902D720AD28720065ED31 /* AppDelegate.swift */,
-				AAE902D920AD28720065ED31 /* MealViewController.swift */,
-				AAE671DB20B7F2CF0060A9DA /* DataService.swift */,
-				AA8F541020AD74ED0047C5DE /* RatingControl.swift */,
-				AA5DAB1320AE796C002FA389 /* MealTableViewController.swift */,
-				AA5DAB1120AE72C5002FA389 /* MealTableViewCell.swift */,
-				AA5DAB1520AE79E7002FA389 /* Meal.swift */,
+				AA753BA520F60280004AEA0C /* View */,
+				AA753BA420F60264004AEA0C /* Controller */,
+				AA753BA320F6025C004AEA0C /* Model */,
 				AAE902DB20AD28720065ED31 /* Main.storyboard */,
 				AAE902DE20AD28720065ED31 /* Assets.xcassets */,
 				AAE902E020AD28720065ED31 /* LaunchScreen.storyboard */,
+				AA753BA020F600E5004AEA0C /* FoodTracker.xcdatamodeld */,
 				AAE902E320AD28720065ED31 /* Info.plist */,
 			);
 			path = FoodTracker;
@@ -155,6 +182,7 @@
 				AAE671DC20B7F2CF0060A9DA /* DataService.swift in Sources */,
 				AAE902DA20AD28720065ED31 /* MealViewController.swift in Sources */,
 				AA8F541120AD74ED0047C5DE /* RatingControl.swift in Sources */,
+				AA753BA220F600E5004AEA0C /* FoodTracker.xcdatamodeld in Sources */,
 				AAE902D820AD28720065ED31 /* AppDelegate.swift in Sources */,
 				AA5DAB1620AE79E7002FA389 /* Meal.swift in Sources */,
 				AA5DAB1220AE72C5002FA389 /* MealTableViewCell.swift in Sources */,
@@ -340,6 +368,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		AA753BA020F600E5004AEA0C /* FoodTracker.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AA753BA120F600E5004AEA0C /* FoodTracker.xcdatamodel */,
+			);
+			currentVersion = AA753BA120F600E5004AEA0C /* FoodTracker.xcdatamodel */;
+			path = FoodTracker.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AAE902CC20AD28720065ED31 /* Project object */;
 }

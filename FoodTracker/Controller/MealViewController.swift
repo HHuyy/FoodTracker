@@ -15,18 +15,16 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ratingControl: RatingControl!
     
-    var index: Int?
+    var index: Food?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         textField.delegate = self
-        if let indexPaath = index {
-            navigationItem.title = DataService.share.meals[indexPaath].name
-            textField.text = DataService.share.meals[indexPaath].name
-            photoImageView.image = DataService.share.meals[indexPaath].photo
-            ratingControl.rating = DataService.share.meals[indexPaath].rating
+        if let indexPath = index {
+            navigationItem.title = indexPath.name
+            textField.text = indexPath.name
+            photoImageView.image = indexPath.photo as? UIImage
+            ratingControl.rating = Int(indexPath.rate)
             
         }
         updateSaveButtonState()
@@ -78,17 +76,26 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
     @IBAction func savebutt(_ sender: UIBarButtonItem) {
-        let name = textField.text ?? ""
-        let photo = photoImageView.image
-        let rating = ratingControl.rating
-        if let indexPath = index {
-            DataService.share.meals[indexPath].name = name
-            DataService.share.meals[indexPath].photo = photo
-            DataService.share.meals[indexPath].rating = rating
-        } else {
-            guard let meal = Meal(name: name, photo: photo, rating: rating) else { return}
-            DataService.share.insertNewMeal(meal: meal)
+//        let name = textField.text ?? ""
+//        let photo = photoImageView.image
+//        let rating = ratingControl.rating
+//        if let indexPath = index {
+//            DataService.share.meals[indexPath].name = name
+//            DataService.share.meals[indexPath].photo = photo
+//            DataService.share.meals[indexPath].rate = Int16(rating)
+//        } else {
+//            guard let meal = Meal(name: name, photo: photo, rating: rating) else { return}
+//            DataService.share.insertNewMeal(meal: meal)
+//        }
+        if index == nil {
+            index = Food(context: AppDelegate.context)
         }
+        guard textField.text != nil else { return }
+        guard ratingControl.rating != nil else { return }
+        index?.name = textField.text
+        index?.photo = photoImageView.image
+        index?.rate = Int16(ratingControl.rating)
+        DataService.share.saveMeal()
         navigationController?.popViewController(animated: true)
     }
     
